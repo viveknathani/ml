@@ -1,3 +1,10 @@
+/*
+    Program to demonstrate kNN classification algorithm.
+    Author : Vivek Nathani
+    The identifier names are self explanatory. 
+    The definition of the function to fill the array dataSet is at the end of this program.
+*/
+
 #include<bits/stdc++.h>
 
 using namespace std;
@@ -84,10 +91,11 @@ int knnClassify(int k, Point predictPoint)
 
 int main()
 {
+    int k = 3; 
     Point test;
-    test.setValues(2.5, 7, -1);
+    test.setValues(2.5, 7, 0); //passing the distance value as 0. It plays no role in the algorithm.
     fillDataSet();
-    int result = knnClassify(3, test);
+    int result = knnClassify(k, test);
     cout<<result<<endl;
     return 0;
 }
