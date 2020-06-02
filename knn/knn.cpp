@@ -16,18 +16,79 @@ class Point
             this->val = color;
         }    
 
+        void setDistance(double D)
+        {
+            this->distance = D;
+        }
+
         double getDistance() 
         {
             return this->distance;
         }       
+
+        double getX()
+        {
+            return this->x;
+        }
+
+        double getY()
+        {
+            return this->y;
+        }
+
+        int getVal()
+        {
+            return this->val;
+        }
 };
 
 Point dataSet[16];
 
 void fillDataSet();
 
+bool comparison(Point a, Point b)
+{
+    return (a.getDistance() < b.getDistance());
+}
+
+double euclideanDistance(Point predictPoint, Point existingPoint)
+{
+    return sqrt(pow(predictPoint.getX() - existingPoint.getX(), 2)
+              + pow(predictPoint.getY() - existingPoint.getY(), 2));
+}
+
+int knnClassify(int k, Point predictPoint)
+{
+    for(int i = 0; i < 16; i++)
+    {
+        dataSet[i].setDistance(euclideanDistance(predictPoint, dataSet[i]));
+    }
+
+    sort(dataSet, dataSet + 16, comparison);
+
+    int greenZeroFrequency = 0;
+    int redOneFrequency = 1;
+
+    for(int i = 0; i < k; i++)
+    {
+        if(dataSet[i].getVal() == 0) greenZeroFrequency++;
+        else redOneFrequency++;
+    }
+
+    int prediction;
+    if(greenZeroFrequency > redOneFrequency) prediction = 0;
+    else prediction = 1;
+
+    return prediction;
+}
+
 int main()
 {
+    Point test;
+    test.setValues(2.5, 7, -1);
+    fillDataSet();
+    int result = knnClassify(3, test);
+    cout<<result<<endl;
     return 0;
 }
 
