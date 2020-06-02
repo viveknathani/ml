@@ -1,3 +1,9 @@
+/*
+    Program to demonstrate kNN regression algorithm.
+    Author : Vivek Nathani
+    The identifier names are self explanatory. 
+    The definition of the function to fill the array dataSet is at the end of this program.
+*/
 #include<bits/stdc++.h>
 
 using namespace std;
@@ -40,6 +46,10 @@ bool comparison(Person a, Person b)
     return (a.getHeight() < b.getHeight());
 }
 
+// we utilise the binary search algorithm to find a crossover point.
+// The crossover point before which elements are smaller than or equal to x and 
+// after which elements are greater
+
 int findCrossOverPoint(int low, int high, double x)
 {
     if(dataSet[high].getHeight() <= x) return high;
@@ -56,15 +66,11 @@ int findCrossOverPoint(int low, int high, double x)
 }
 double knnRegression(Person predictPerson, int k)
 {
-    Person arr[k];
-    // we need to find k closest values and find their mean
+    sort(dataSet, dataSet + 13, comparison);
 
-    //we first sort according to height
-    sort(dataSet, dataSet + 14, comparison);
-
-    //now we find the cp
     double x = predictPerson.getHeight();
-    int cp = findCrossOverPoint(0, 13, x);
+
+    int cp = findCrossOverPoint(0, 12, x);
 
     int rightIndex = cp + 1;
 
@@ -112,10 +118,11 @@ double knnRegression(Person predictPerson, int k)
 
 int main()
 {
+    int k = 3;
     fillDataSet();
     Person test;
     test.setValues(70, -1);
-    cout<<knnRegression(test, 7)<<endl;
+    cout<<knnRegression(test, k);
     return 0;
 }
 
