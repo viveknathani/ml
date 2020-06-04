@@ -74,7 +74,7 @@ int knnClassify(int k, Point predictPoint)
     sort(dataSet, dataSet + 16, comparison);
 
     int greenZeroFrequency = 0;
-    int redOneFrequency = 1;
+    int redOneFrequency = 0;
 
     for(int i = 0; i < k; i++)
     {
