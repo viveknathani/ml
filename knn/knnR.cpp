@@ -47,8 +47,8 @@ bool comparison(Person a, Person b)
 }
 
 // we utilise the binary search algorithm to find a crossover point.
-// The crossover point before which elements are smaller than or equal to x and 
-// after which elements are greater
+// The crossover point is the point before which elements are smaller 
+// than or equal to x and after which elements are greater
 
 int findCrossOverPoint(int low, int high, double x)
 {
@@ -64,6 +64,7 @@ int findCrossOverPoint(int low, int high, double x)
     
     if(dataSet[mid].getHeight() > x) return findCrossOverPoint(low, mid - 1, x);
 }
+
 double knnRegression(Person predictPerson, int k)
 {
     sort(dataSet, dataSet + 13, comparison);
