@@ -1,45 +1,82 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 #include "../csv/csv.cpp"
 using namespace std;
 
-vector<vector<string>> readFromCSV()
+// function to calculate mean of vector of any data type
+template<typename T>
+double meanOfVector(const vector<T> &vec)
 {
-    fstream filePointer;
-    filePointer.open("salary_data.csv", ios::in);
+    double mean = 0;
+    double len = vec.size();
 
-    vector<vector<string>> rows;
-    vector<string> row;
-    string line;
-    while(!filePointer.eof())
+    for(int i = 0; i < len; i++)
     {
-        filePointer >> line;
-        stringstream ss(line);
-
-        while(ss.good())
-        {
-            string word;
-            getline(ss, word, ',');
-            row.push_back(word);
-        }
-
-        rows.push_back(row);
-        row.clear();
+        mean += (double)vec[i];
     }
-    return rows;
+
+    mean /= len;
+    return mean;
+}
+
+// function that uses the ols method
+// and returns the values of m and b in y = mx + b
+template<typename T>
+pair<double, double> ordinaryLeastSquares(const vector<T> &xAxis, const vector<T> &yAxis)
+{
+    double m = 0, b = 0;
+    double xMean = meanOfVector(xAxis);
+    double yMean = meanOfVector(yAxis);
+
+    double numerator = 0;
+    double denominator = 0;
+
+    // since xAxis.size() == yAxis.size(), we will use a common notation
+    int dataSize = xAxis.size(); 
+
+    for(int i = 0; i < dataSize; i++)
+    {
+        double term = (xAxis[i]-xMean)*(yAxis[i]-yMean);
+        numerator += term;
+
+        double dTerm = pow((xAxis[i]-xMean), 2);
+        denominator += dTerm;
+    }
+
+    m = numerator / denominator;
+    b = yMean - (m*xMean);
+
+    pair<double, double> weights;
+    weights.first = m;
+    weights.second = b;
+
+    return weights;
 }
 
 int main()
 {
-    vector<vector<string>> rows = readFromCSV();
+    CSVReader dataSet("salary_data.csv");
+    vector<vector<string>> rows = dataSet.getAllRows();
 
-    for(int i = 0; i < rows.size(); i++)
+    string columnOneName = rows[0][0];
+    string columnTwoName = rows[0][1];
+
+    vector<double> xAxis;
+    vector<double> yAxis;
+
+    for(int i = 1; i < rows.size(); i++)
     {
-        for(int j = 0; j < rows[i].size(); j++)
-        {
-            cout<<rows[i][j]<<" ";
-        }
-        cout<<endl;
+        xAxis.push_back(stod(rows[i][0]));  // convert to double and push, stod()
+        yAxis.push_back(stoi(rows[i][1]));  // convert to int and push, stoi()
     }
-    CSVReader test("file");
+
+    pair<double, double> weights = ordinaryLeastSquares(xAxis, yAxis);
+
+    double testX;
+    cout << "Enter the experience years of the candidate : ";
+    cin >> testX;
+
+    double result = (weights.first*testX) + weights.second;
+
+    cout << "The salary of the employee is : "<<result<<endl; 
     return 0;
 }
