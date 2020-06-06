@@ -45,8 +45,10 @@ void gradientDescent(const vector<T> &xAxis, const vector<T> &yAxis, double &m, 
 
     if(lasso)
     {
-        m += (alpha * 2 * learningRate);
-        b += (alpha * 2 * learningRate);
+        if(m > 0) m += (alpha * 2 * learningRate);
+        else m += (alpha * -2 * learningRate);
+        if(b > 0) b += (alpha * 2 * learningRate);
+        else b += (alpha * -2 * learningRate);
     }
 }
 
