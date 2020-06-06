@@ -3,6 +3,10 @@
 
 using namespace std; 
 
+// validate this from the user
+bool ridge = false;
+bool lasso = false;
+
 template<typename T>
 void gradientDescent(const vector<T> &xAxis, const vector<T> &yAxis, double &m, double &b, double &learningRate)
 {
@@ -32,6 +36,18 @@ void gradientDescent(const vector<T> &xAxis, const vector<T> &yAxis, double &m, 
 
     m += (gradientM * learningRate);
     b += (gradientB * learningRate);
+
+    if(ridge)
+    {
+        m += (alpha * 2 * m * learningRate);
+        b += (alpha * 2 * b * learningRate);
+    }
+
+    if(lasso)
+    {
+        m += (alpha * 2 * learningRate);
+        b += (alpha * 2 * learningRate);
+    }
 }
 
 template<typename T>
@@ -76,6 +92,12 @@ int main()
     double input;
     cout << "Input for prediction : " << endl;
     cin >> input;
+
+    int choice;
+    cout << "Press 0 for ridge, 1 for lasso, 2 for none" << endl;
+    cin >> choice;
+    if(choice == 0) ridge = true;
+    if(choice == 1) lasso = true;
 
     double result = (m*input) + b;
 
