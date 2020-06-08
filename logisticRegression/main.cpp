@@ -82,13 +82,13 @@ void normalize(vector<double> &vec)
 
 /*
     Returning the value of sigmoid function g(z)
-    g(z) =  1 / (1 + e^z)
+    g(z) =  1 / (1 + e^-z)
 */
 double sigmoid(const vector<double> &b, double x1, double x2)
 {
     double y = b[0] + ( b[1] * x1 ) + ( b[2] * x2 );
     double e = M_E;
-    double term = 1 + pow(e, y);
+    double term = 1 + pow(e, -1*y);
     return pow(term, -1);
 }
 
@@ -132,9 +132,9 @@ void gradientDescent(vector<double> &x1, vector<double> &x2, const vector<double
         deltaB[2] += ( error * x2[i] );
     }
 
-    b[0] += deltaB[0];
-    b[1] += deltaB[1];
-    b[2] += deltaB[2];
+    b[0] -= deltaB[0];
+    b[1] -= deltaB[1];
+    b[2] -= deltaB[2];
 }
 
 /*
@@ -160,11 +160,7 @@ void trainModel(vector<double> &x1, vector<double> &x2, const vector<double> &y,
         changeCost = oldCost - cost;
         numberOfIterations++;
     }
-
-    b[0] *= -1;
-    b[1] *= -1;
-    b[2] *= -1;
-
+    
     show(numberOfIterations);
 }
 
