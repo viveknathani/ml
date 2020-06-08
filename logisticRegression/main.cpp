@@ -1,6 +1,7 @@
 /* 
     Program to display logistic regression
-    Our model equation is y = b0 + b1x1 + b2x2
+    If y is, y = b0 + b1x1 + b2x2,
+    then our model equation is p = sigmoid(y)
     Author : Vivek Nathani
 */
 
