@@ -125,7 +125,7 @@ void gradientDescent(vector<double> &x1, vector<double> &x2, const vector<double
     for(int i = 0; i < dataSize; i++)
     {
         double h = sigmoid(b, x1[i], x2[i]);
-        double error = h - y[i];
+        double error = y[i] - h;
         error *= learningRate;
 
         deltaB[0] += error;
@@ -133,9 +133,9 @@ void gradientDescent(vector<double> &x1, vector<double> &x2, const vector<double
         deltaB[2] += ( error * x2[i] );
     }
 
-    b[0] -= deltaB[0];
-    b[1] -= deltaB[1];
-    b[2] -= deltaB[2];
+    b[0] += deltaB[0];
+    b[1] += deltaB[1];
+    b[2] += deltaB[2];
 }
 
 /*
