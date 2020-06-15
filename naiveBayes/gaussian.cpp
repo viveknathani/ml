@@ -9,7 +9,7 @@ template<typename T> double meanOfVector(const vector<T> &vec);
 template<typename T> double standardDeviation(const vector<T> &vec, double mean);
 vector<double> probabilityDensity(const vector<double> &sample, const vector<double> &mean, const vector<double> &sd);
 int calcFinal(const vector<vector<double>> &dataSet, const vector<int> &yVector, const vector<double> &sample);
-vector<int> makePredictions(const vector<vector<double>> &dataSet, const vector<int> &yVector);
+vector<int> makePredictions(const vector<vector<double>> &trainSet, const vector<vector<double>> &testSet, const vector<int> &yTrain);
 double checkAccuracy(const vector<int> &yVector, const vector<int> &predictions);
 
 main()
@@ -43,7 +43,9 @@ main()
     show(trainRes.size());
     show(testRes.size());
     show(test[0].size());
-
+    vector<int> predictions = makePredictions(train, test, trainRes);
+    double Accuracy = checkAccuracy(testRes, predictions);
+    show(Accuracy);
 }
 
 template<typename T> double meanOfVector(const vector<T> &vec)
@@ -99,7 +101,7 @@ template<typename T> double standardDeviation(const vector<T> &vec, double mean)
 
     sd = sqrt(sd);
 
-    sd = sd / (double)(vec.size);
+    sd = sd / (double)(vec.size());
 
     return sd;
 }
@@ -115,11 +117,10 @@ vector<double> probabilityDensity(const vector<double> &sample, const vector<dou
         double res = factor * pow(M_E, term);
         result.push_back(res);
     }
-
     return result;
 }
 
-pair<double, double> priorProbabilities(const vector<double>& yVector)
+pair<double, double> priorProbabilities(const vector<int>& yVector)
 {
     double class0Prop = 0;
     double class1Prop = 0;
@@ -135,7 +136,7 @@ pair<double, double> priorProbabilities(const vector<double>& yVector)
     class0Prop = (double) (count0) / (double) (yVector.size());
     class1Prop = (double) (count1) / (double) (yVector.size());
 
-    pair<double, double> priors(class0Prop, class1Prop);
+    pair<double, double> priors = make_pair(class0Prop, class1Prop);
 
     return priors;
 }
@@ -178,11 +179,12 @@ int calcFinal(const vector<vector<double>> &dataSet, const vector<int> &yVector,
         pOneSample *= densities1[i];
     }
 
+    pZeroSample += 1;
+    pOneSample += 1;
+
     int label;
-
-    if(pOneSample >= pZeroSample) label = 1;
-    else label = 0;
-
+    if(pZeroSample <= pOneSample) label = 0;
+    else label = 1;
     return label; 
 }
 
@@ -191,7 +193,7 @@ vector<int> makePredictions(const vector<vector<double>> &trainSet, const vector
 {
     vector<int> predictions;
 
-    for(int i = 0; i < testSet[i].size(); i++)
+    for(int i = 0; i < testSet.size(); i++)
     {
         vector<double> sample;
         for(int j = 0; j < testSet[i].size(); j++)
@@ -200,9 +202,26 @@ vector<int> makePredictions(const vector<vector<double>> &trainSet, const vector
         }
 
         int res = calcFinal(trainSet, yTrain, sample);
+
+        predictions.push_back(res);
     }
+
+    return predictions;
 }
 
+double checkAccuracy(const vector<int> &yVector, const vector<int> &predictions)
+{
+    int count = 0;
+
+    for(int i = 0; i < yVector.size(); i++)
+    {
+        if(yVector[i] == predictions[i]) count++;
+    }
+
+    double percent = (double) count / (double) yVector.size();
+    percent *= (double)100;
+    return percent;
+}
 
 
 
