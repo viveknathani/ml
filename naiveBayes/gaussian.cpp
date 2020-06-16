@@ -1,3 +1,8 @@
+/*
+    Gaussian Naive Bayes Classification.
+    Author : Vivek Nathani
+*/
+
 #include <bits/stdc++.h>
 #include "../csv/csv.h"
 #define show(x) cout << #x << " = " << x << endl

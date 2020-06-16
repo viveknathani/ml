@@ -1,3 +1,8 @@
+/*
+    Bernoulli Naive Bayes Classification.
+    Author : Vivek Nathani
+*/
+
 #include <bits/stdc++.h>
 #include "../csv/csv.h"
 #define show(x) cout << #x << " = " << x << endl
@@ -47,9 +52,12 @@ pair<double, double> findPriors(const vector<vector<string>> &dataSet)
     return make_pair(passP, failP);
 }
 
+// find the conditional or posterior probabilites
 pair<vector<double>, vector<double>> conditionalProbabilities(const vector<vector<string>> &dataSet, const vector<string> &sample)
 {
     vector<double> passProbs, failProbs;
+
+    // since we know the value of denominator already (by looking at the dataset)
     double passD = 3, failD = 2;
 
 

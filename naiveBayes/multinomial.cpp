@@ -1,3 +1,8 @@
+/*
+    Multinomial Naive Bayes Classification.
+    Author : Vivek Nathani
+*/
+
 #include <bits/stdc++.h>
 #include "../csv/csv.h"
 #define show(x) cout << #x << " = " << x << endl
@@ -67,6 +72,12 @@ int findVocabulary(const vector<vector<string>> &dataSet)
     return words.size();
 }
 
+/* 
+    We need to compute and store the posterior probabilites and 
+    we need to be able to utilise them further. So a hash table 
+    would be efficient for this. In C++ STL, unordered_map works 
+    as a hash table. Hence we use it here.
+*/
 pair<unordered_map<string, double>, unordered_map<string, double>> conditionalProbabilites(const vector<vector<string>> &dataSet, const vector<string> &sample)
 {
     unordered_map<string, double> c, j;
@@ -121,6 +132,10 @@ pair<unordered_map<string, double>, unordered_map<string, double>> conditionalPr
     return probs;
 }
 
+/*
+    We build a hash table to calculate the 
+    frequency of each word in the sample data.
+*/
 unordered_map<string, int> frequencyInSample(const vector<string> &sample)
 {
     unordered_map<string, int> frequency;
